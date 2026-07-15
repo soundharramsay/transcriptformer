@@ -7,3 +7,7 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 
 ----- installation done sucessfully 
 ----- try running on your own data
+
+
+### dataset downloaded from (test data)
+wget https://datasets.cellxgene.cziscience.com/ed440808-09de-4fc6-9a1a-5c15056609dd.h5ad
