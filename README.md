@@ -49,3 +49,6 @@ echo "Job finished at $(date)"
 It is for subsetting downloaded datasets and its metdata ---only downloaded folder 
 
 ### data reformatting 
+ script 1 --- bash check_h5ad.sh 
+ script2 ---- fix_ensembl_id.sh
+ script3 ----verifying_id_fix.sh
