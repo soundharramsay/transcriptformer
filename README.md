@@ -43,3 +43,9 @@ transcriptformer inference \
   --num-gpus 1
 
 echo "Job finished at $(date)"
+
+
+###  rs_metedata_extraction_script
+It is for subsetting downloaded datasets and its metdata ---only downloaded folder 
+
+### data reformatting 
