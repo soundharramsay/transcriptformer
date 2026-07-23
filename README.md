@@ -278,7 +278,7 @@ transcriptformer inference \
 
 
 
-
+conda activate scanpy_new
 
 
 Python plotting 
@@ -289,6 +289,11 @@ Comparison against author cell identity labels (cell_type, Label_fine)
 
 Usage:
     python transcriptformer_analysis.py
+
+    In the browser (after connecting via your SSH tunnel)
+Open your notebook
+Go to Kernel → Change Kernel → Python (scanpy_new)
+Or when creating a new notebook, pick "Python (scanpy_new)" from the launcher instead of the default "Python 3"
 """
 
 import scanpy as sc
