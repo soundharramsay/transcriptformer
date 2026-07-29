@@ -1,3 +1,34 @@
+### transcriptformer --Sara G Danielli et al 
+
+### download the file from figshare
+ARTICLE_ID=25127243
+
+curl -s https://api.figshare.com/v2/articles/${ARTICLE_ID} \
+| jq -r '.files[].download_url' \
+| xargs -n1 wget -c
+
+ cp 44359175 44359175.gz
+
+ 44359175.gz----- data extracted
+
+#############
+conda activate scanpy_new
+
+within this I opened R and install seurat 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # transcriptformer
 transcriptformer
 
