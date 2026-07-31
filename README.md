@@ -12,9 +12,8 @@ curl -s https://api.figshare.com/v2/articles/${ARTICLE_ID} \
  44359175.gz----- data extracted
 
 #############
-conda activate scanpy_new
-
-within this I opened R and install seurat 
+above dataset os in rds format 
+visuvalized using R stuido in SCU 
 
 
 
