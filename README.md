@@ -15,8 +15,78 @@ curl -s https://api.figshare.com/v2/articles/${ARTICLE_ID} \
 above dataset os in rds format 
 visuvalized using R stuido in SCU 
 
- module load rstudio_4.4/4.4.3_Seurat
+module load rstudio_4.4/4.4.3_Seurat
+rstudio_run
 
+
+Overview
+
+This manual covers starting an RStudio Server job on the SCU cluster and connecting to it from your local Mac using two chained SSH tunnels (this method works reliably; direct -J ProxyJump may fail due to key/passphrase handling).
+
+Step 1 — Start the RStudio job (on SCU login node)
+
+SSH into the login node and start the job:
+
+bash
+ssh sor4003@scu-login02.med.cornell.edu
+module load rstudio_4.4/4.4.3_Seurat
+rstudio_run
+
+Wait for output like:
+
+RStudio Server has been successfully started on c9
+...
+2. Point your web browser to http://localhost:51995
+3. log in to RStudio Server using the following credentials:
+   user: sor4003
+   password: <one-time job password>
+
+Note the node name (e.g. c9), the port (e.g. 51995), and the one-time password — these change per job.
+
+Check job status any time with:
+
+bash
+squeue -u sor4003
+Step 2 — Build the tunnel (chained method)
+2a. Terminal window #1 — on scu-login02, forward to the compute node
+
+While still logged into scu-login02 (from Step 1, or a new session):
+
+bash
+ssh -L 51995:localhost:51995 sor4003@c9
+Enter your SSH key passphrase when prompted.
+Leave this session open (do not exit).
+2b. Terminal window #2 — on your Mac, forward to scu-login02
+
+Open a new, separate terminal window on your Mac:
+
+bash
+ssh -L 51995:localhost:51995 sor4003@scu-login02.med.cornell.edu
+Enter your Cornell/SCU password when prompted.
+Leave this session open too.
+
+You now have a chain:
+
+Mac (localhost:51995) → scu-login02 (localhost:51995) → c9 (localhost:51995)
+Step 3 — Open RStudio in browser
+
+Go to:
+
+http://localhost:51995
+
+Log in with:
+
+user: sor4003
+password: <one-time job password from Step 1>
+Step 4 — When finished
+In RStudio, click the power button (top right) to end the session.
+On the SCU login node, cancel the job:
+bash
+   scancel -f <JOBID>
+
+(JOBID shown in the rstudio_run output and in squeue -u sor4003) 3. Close both terminal tunnel windows (or Ctrl+C in each).
+
+######################################
 
 library(Seurat)
 library(Matrix)
@@ -37,6 +107,80 @@ write.csv(colnames(counts), file.path(export_dir, "barcodes.csv"), row.names = F
 
 # Cell metadata
 write.csv(obj@meta.data, file.path(export_dir, "metadata.csv"), row.names = TRUE)
+
+################################## in python jupyter notebook 
+
+import scanpy as sc
+import pandas as pd
+import scipy.io as sio
+import scipy.sparse as sp
+import json
+import os
+
+base_dir = "/home/sor4003/store_sor4003/transcriptformer/data_RMS_danielli"
+
+dataset_id = "FPRMS_PAX7FOXO1"
+dataset_path = os.path.join(base_dir, dataset_id)
+os.makedirs(dataset_path, exist_ok=True)  # only new folder created — required by TranscriptFormer structure
+
+# Load matrix (genes x cells from R) and transpose to cells x genes for AnnData
+counts = sio.mmread(os.path.join(base_dir, "counts.mtx")).T.tocsr()
+
+genes = pd.read_csv(os.path.join(base_dir, "genes.csv"))["x"].values
+barcodes = pd.read_csv(os.path.join(base_dir, "barcodes.csv"))["x"].values
+meta = pd.read_csv(os.path.join(base_dir, "metadata.csv"), index_col=0)
+
+adata = sc.AnnData(X=counts, obs=meta, var=pd.DataFrame(index=genes))
+adata.obs_names = barcodes
+
+# Save h5ad
+adata.write_h5ad(os.path.join(dataset_path, "full.h5ad"))
+
+# Success marker
+open(os.path.join(dataset_path, "__success__"), "w").close()
+
+# Metadata JSON — written directly into base_dir
+metadata_list = [{
+    "dataset_id": dataset_id,
+    "n_cells": adata.n_obs,
+    "n_genes": adata.n_vars,
+    "tissue_types": meta["location"].dropna().unique().tolist(),
+    "subtype": meta["subtype"].dropna().unique().tolist(),
+    "fusion": meta["fusion"].dropna().unique().tolist(),
+}]
+
+with open(os.path.join(base_dir, "dataset_metadata.json"), "w") as f:
+    json.dump(metadata_list, f, indent=2)
+
+print("Done. Files in:", dataset_path)
+print(os.listdir(dataset_path))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
