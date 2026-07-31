@@ -18,7 +18,25 @@ visuvalized using R stuido in SCU
  module load rstudio_4.4/4.4.3_Seurat
 
 
+library(Seurat)
+library(Matrix)
 
+obj <- readRDS("~/store_sor4003/transcriptformer/data_RMS_danielli/FPRMS_PAX7FOXO1_final_20240130.rds")
+DefaultAssay(obj) <- "RNA"
+
+export_dir <- "~/store_sor4003/transcriptformer/raw_export"
+dir.create(export_dir, recursive = TRUE, showWarnings = FALSE)
+
+# Raw counts matrix (genes x cells)
+counts <- GetAssayData(obj, assay = "RNA", slot = "counts")
+writeMM(counts, file.path(export_dir, "counts.mtx"))
+
+# Gene names and cell barcodes
+write.csv(rownames(counts), file.path(export_dir, "genes.csv"), row.names = FALSE)
+write.csv(colnames(counts), file.path(export_dir, "barcodes.csv"), row.names = FALSE)
+
+# Cell metadata
+write.csv(obj@meta.data, file.path(export_dir, "metadata.csv"), row.names = TRUE)
 
 
 
