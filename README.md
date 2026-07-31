@@ -15,6 +15,9 @@ curl -s https://api.figshare.com/v2/articles/${ARTICLE_ID} \
 above dataset os in rds format 
 visuvalized using R stuido in SCU 
 
+ module load rstudio_4.4/4.4.3_Seurat
+
+
 
 
 
