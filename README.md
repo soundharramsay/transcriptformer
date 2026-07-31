@@ -41,14 +41,6 @@ write.csv(obj@meta.data, file.path(export_dir, "metadata.csv"), row.names = TRUE
 
 
 
-
-
-
-
-
-
-
-
 # transcriptformer
 transcriptformer
 
