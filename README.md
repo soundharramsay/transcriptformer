@@ -1,3 +1,42 @@
+##chat 1
+ Literatures shown that neuronal cell type emerge in different cancer types - RMS, melanoma and etc. While in melanoma the emergence this neuronal cell state is attributed to volumetric compression, the neuronal cell state 
+ is not compared across dataset. I am planning to address this problem. 
+
+ My plan.
+Take different cancer were neuronal cell state is reported and collect these cells and integrate along with developing brain cell atlas. --- what do u think about strategy, can u suggest a bioinformatic workflow involving seurat based batch correction.
+
+### chat 1 -- dropping this plan 
+
+chat 2 ###3 re-analysis of scRNA-Seq dataset from bartel
+
+##1) data downloaded --/home/sor4003/store_sor4003/transcriptformer/Z8_lung_scRNASeq
+
+##2) conda activate scanpy_new
+converting data into --Transcriptformer input --- python script 
+convert_to_transcriptformer_h5ad.py
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### transcriptformer --Sara G Danielli et al 
 
 ### download the file from figshare
